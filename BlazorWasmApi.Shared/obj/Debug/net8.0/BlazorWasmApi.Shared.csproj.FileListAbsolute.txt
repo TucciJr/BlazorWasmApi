@@ -1,0 +1,12 @@
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\bin\Debug\net8.0\BlazorWasmApi.Shared.deps.json
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\bin\Debug\net8.0\BlazorWasmApi.Shared.dll
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\bin\Debug\net8.0\BlazorWasmApi.Shared.pdb
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\BlazorWasmApi.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\BlazorWasmApi.Shared.AssemblyInfoInputs.cache
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\BlazorWasmApi.Shared.AssemblyInfo.cs
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\BlazorWasmApi.Shared.csproj.CoreCompileInputs.cache
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\BlazorWasmApi.Shared.sourcelink.json
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\BlazorWasmApi.Shared.dll
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\refint\BlazorWasmApi.Shared.dll
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\BlazorWasmApi.Shared.pdb
+C:\JJR\Dev\Blazor\BlazorWasmApi\BlazorWasmApi.Shared\obj\Debug\net8.0\ref\BlazorWasmApi.Shared.dll

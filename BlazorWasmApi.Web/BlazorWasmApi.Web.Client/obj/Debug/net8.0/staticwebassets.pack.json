@@ -1,0 +1,37 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\JJR\\Dev\\Blazor\\BlazorWasmApi\\BlazorWasmApi.Web\\BlazorWasmApi.Web.Client\\bin\\Debug\\net8.0\\wwwroot\\_framework\\blazor.webassembly.js",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js"
+    },
+    {
+      "Id": "C:\\JJR\\Dev\\Blazor\\BlazorWasmApi\\BlazorWasmApi.Web\\BlazorWasmApi.Web.Client\\obj\\Debug\\net8.0\\compressed\\ed17ho9kdf.gz",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webassembly.js.gz"
+    },
+    {
+      "Id": "C:\\JJR\\Dev\\Blazor\\BlazorWasmApi\\BlazorWasmApi.Web\\BlazorWasmApi.Web.Client\\wwwroot\\appsettings.Development.json",
+      "PackagePath": "staticwebassets\\appsettings.Development.json"
+    },
+    {
+      "Id": "C:\\JJR\\Dev\\Blazor\\BlazorWasmApi\\BlazorWasmApi.Web\\BlazorWasmApi.Web.Client\\wwwroot\\appsettings.json",
+      "PackagePath": "staticwebassets\\appsettings.json"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.BlazorWasmApi.Web.Client.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.BlazorWasmApi.Web.Client.props",
+      "PackagePath": "build\\BlazorWasmApi.Web.Client.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.BlazorWasmApi.Web.Client.props",
+      "PackagePath": "buildMultiTargeting\\BlazorWasmApi.Web.Client.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.BlazorWasmApi.Web.Client.props",
+      "PackagePath": "buildTransitive\\BlazorWasmApi.Web.Client.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
