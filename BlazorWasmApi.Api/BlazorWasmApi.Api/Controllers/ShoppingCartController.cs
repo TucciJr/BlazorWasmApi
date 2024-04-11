@@ -46,14 +46,7 @@ namespace BlazorWasmApi.Api.Controllers
                 return NoContent();
             }
 
-            var product = await productRepository.GetItem(cartItem.ProductId);
-
-            if (product == null)
-            {
-                throw new Exception("No products exists.");
-            }
-
-            var cartItemDto = cartItem.ConvertToDto(product);
+            var cartItemDto = cartItem.ConvertToDto();
 
             return Ok(cartItemDto);
         }
@@ -75,7 +68,7 @@ namespace BlazorWasmApi.Api.Controllers
                 throw new Exception($"Somethig went wrong when attempting to retrieve product #{newCartItem.ProductId}");
             }
 
-            var newCartItemDto = newCartItem.ConvertToDto(product);
+            var newCartItemDto = newCartItem.ConvertToDto();
 
             return CreatedAtAction(
                 nameof(GetItem),
@@ -95,23 +88,34 @@ namespace BlazorWasmApi.Api.Controllers
                     return NotFound();
                 }
 
-                var product = await productRepository.GetItem(cartItem.ProductId);
-                if (product == null)
-                {
-                    return NotFound();
-                }
-
-                var cartItemDto = cartItem.ConvertToDto(product);
+                var cartItemDto = cartItem.ConvertToDto();
 
                 return Ok(cartItemDto);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-                throw;
             }
-            {
+        }
 
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult<CartItemDto>> UpdateQty(int id, CartItemQtyUpdateDto cartItemQtyUpdateDto)
+        {
+            try
+            {
+                var cartItem = await shoppingCartRepository.UpdateQty(id, cartItemQtyUpdateDto);
+
+                if (cartItem == null)
+                {
+                    return NotFound();
+                }
+
+                var cartItemDto = cartItem.ConvertToDto();
+                return base.Ok(cartItemDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

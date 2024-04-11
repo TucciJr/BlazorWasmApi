@@ -62,16 +62,11 @@ public class ShoppingCartRepository : IShoppingCartRepository
 
     public async Task<CartItem> GetItem(int id)
     {
-        return await (from cart in shopOnlineDbContext.Carts
-                      join cartItem in shopOnlineDbContext.CartItems
-                      on cart.Id equals cartItem.CartId
-                      select new CartItem
-                      {
-                          Id = cartItem.Id,
-                          ProductId = cartItem.ProductId,
-                          Qty = cartItem.Qty,
-                          CartId = cartItem.CartId
-                      }).SingleOrDefaultAsync();
+        return await shopOnlineDbContext
+            .CartItems
+            .Include(x => x.Cart)
+            .Include(x => x.Product)
+            .SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<CartItem>> GetItems(int userId)
@@ -82,22 +77,20 @@ public class ShoppingCartRepository : IShoppingCartRepository
             .ToListAsync();
 
         return cartItems;
-            
-        return await (from cart in shopOnlineDbContext.Carts
-                      join cartItem in shopOnlineDbContext.CartItems
-                      on cart.Id equals cartItem.CartId
-                      where cart.UserId == userId
-                      select new CartItem
-                      {
-                          Id = cartItem.Id,
-                          ProductId = cartItem.ProductId,
-                          Qty = cartItem.Qty,
-                          CartId = cartItem.CartId
-                      }).ToListAsync();
     }
 
-    public Task<CartItem> UpdateQty(int id, CartItemQtyUpdateDto cartItemQtyUpdateDto)
+    public async Task<CartItem> UpdateQty(int id, CartItemQtyUpdateDto cartItemQtyUpdateDto)
     {
-        throw new NotImplementedException();
+        var item = await GetItem(id);
+
+        if (item != null)
+        {
+            item.Qty = cartItemQtyUpdateDto.Qty;
+            await shopOnlineDbContext.SaveChangesAsync();
+
+            return item;
+        }
+
+        return null;
     }
 }

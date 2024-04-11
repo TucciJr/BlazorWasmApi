@@ -1,7 +1,7 @@
 ﻿using BlazorWasmApi.Models.Dtos;
 using BlazorWasmApi.Web.Services.Contracts;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using System.Formats.Asn1;
 
 namespace BlazorWasmApi.Web.Components.Pages;
 
@@ -31,13 +31,38 @@ public partial class ShoppingCart : ComponentBase
         ShoppingCartItems = ShoppingCartItems.Where(x => x.Id != id);
     }
 
-    private CartItemDto GetCartItem(int id)
+    protected async Task UpdateQtyCartItem_Click(int id, int qty)
     {
-        return ShoppingCartItems.FirstOrDefault(x => x.Id == id);
-    }
+        try
+        {
+            if (qty > 0)
+            {
+                var updateItemDto = new CartItemQtyUpdateDto
+                {
+                    CartItemId = id,
+                    Qty = qty
+                };
 
-    private void RemoveCartItem(int id)
-    {
-        var cartItemDto = GetCartItem(id);
+                var returnedUpdateItemDto = await ShoppingCartService.UpdateQty(updateItemDto);
+            }
+            else
+            {
+                var item = ShoppingCartItems.FirstOrDefault(x => x.Id == id);
+
+                if (item != null)
+                {
+                    item.Qty = 1;
+                    item.TotalPrice = item.Price;
+                }
+                {
+
+                }
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
     }
 }

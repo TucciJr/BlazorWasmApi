@@ -56,19 +56,25 @@ public static class DtoConversions
                 }).ToList();
     }
 
-    public static CartItemDto ConvertToDto(this CartItem cartItem, Product product)
+    public static CartItemDto ConvertToDto(this CartItem cartItem)
     {
-        return new CartItemDto
+        var cartItemDto = new CartItemDto
         {
             Id = cartItem.Id,
             ProductId = cartItem.ProductId,
-            ProductName = product.Name,
-            ProductDescription = product.Description,
-            ProductImageURL = product.ImageURL,
-            Price = product.Price,
             CartId = cartItem.CartId,
             Qty = cartItem.Qty,
-            TotalPrice = cartItem.Qty * product.Price
+            TotalPrice = cartItem.Qty * (cartItem.Product?.Price ?? 0) // Se Product for nulo, assume preço zero
         };
+
+        if (cartItem.Product != null)
+        {
+            cartItemDto.ProductName = cartItem.Product.Name;
+            cartItemDto.ProductDescription = cartItem.Product.Description;
+            cartItemDto.ProductImageURL = cartItem.Product.ImageURL;
+            cartItemDto.Price = cartItem.Product.Price;
+        }
+
+        return cartItemDto;
     }
 }
