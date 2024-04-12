@@ -25,7 +25,7 @@ public class ShoppingCartRepository : IShoppingCartRepository
     {
         if (await CartItemExists(cartItemToAddDto.CartId, cartItemToAddDto.ProductId) == false)
         {
-            var item = await (from product in shopOnlineDbContext.Products
+            var cartItem = await (from product in shopOnlineDbContext.Products
                               where product.Id == cartItemToAddDto.ProductId
                               select new CartItem
                               {
@@ -34,12 +34,24 @@ public class ShoppingCartRepository : IShoppingCartRepository
                                   Qty = cartItemToAddDto.Qty
                               }).SingleOrDefaultAsync();
 
-            if (item !=  null)
+            if (cartItem !=  null)
             {
-                var result = await shopOnlineDbContext.CartItems.AddAsync(item);
+                var result = await shopOnlineDbContext.CartItems.AddAsync(cartItem);
                 await shopOnlineDbContext.SaveChangesAsync();
 
                 return result.Entity;
+            }
+        }
+        else
+        {
+            var cartItem = await shopOnlineDbContext.CartItems.SingleOrDefaultAsync(x => x.CartId == cartItemToAddDto.CartId && x.ProductId == cartItemToAddDto.ProductId);
+
+            if (cartItem != null)
+            {
+                cartItem.Qty++;
+                await shopOnlineDbContext.SaveChangesAsync();
+
+                return cartItem;
             }
         }
 

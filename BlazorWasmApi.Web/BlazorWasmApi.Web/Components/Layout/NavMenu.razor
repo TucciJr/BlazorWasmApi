@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@implements IDisposable
+@inject IShoppingCartService shoppingCartService
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorWasmApi.Web</a>
     </div>
@@ -14,11 +17,37 @@
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
+        <div class="nav-item px-3 d-sm-none">
             <NavLink class="nav-link" href="ShoppingCart">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Cart
+                <span class="fas fa-shopping-cart" aria-hidden="true"></span> Shopping Cart (<b>@shoppingCartItemsCount</b>)
             </NavLink>
         </div>
     </nav>
 </div>
 
+@code {
+    private bool collapseNavMenu { get; set; }
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private int shoppingCartItemsCount = 0;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override void OnInitialized()
+    {
+        shoppingCartService.OnShoppingCartChanged += ShoppingCartChanged;
+    }
+
+    private void ShoppingCartChanged(int totalQty)
+    {
+        shoppingCartItemsCount = totalQty;
+        StateHasChanged();
+    }
+
+    void IDisposable.Dispose()
+    {
+        shoppingCartService.OnShoppingCartChanged -= ShoppingCartChanged;
+    }
+}

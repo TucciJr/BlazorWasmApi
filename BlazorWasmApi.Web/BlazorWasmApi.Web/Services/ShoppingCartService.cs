@@ -10,6 +10,8 @@ public class ShoppingCartService : IShoppingCartService
 {
     private readonly HttpClient httpClient;
 
+    public event Action<int> OnShoppingCartChanged;
+
     public ShoppingCartService(HttpClient httpClient)
     {
         this.httpClient = httpClient;
@@ -110,6 +112,14 @@ public class ShoppingCartService : IShoppingCartService
         catch (Exception)
         {
             throw;
+        }
+    }
+
+    public void RaiseEventoOnShoppingCartChanged(int totalQty)
+    {
+        if (OnShoppingCartChanged != null)
+        {
+            OnShoppingCartChanged.Invoke(totalQty);
         }
     }
 }
