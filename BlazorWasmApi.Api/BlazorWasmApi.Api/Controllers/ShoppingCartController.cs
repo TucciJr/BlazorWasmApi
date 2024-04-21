@@ -24,56 +24,77 @@ namespace BlazorWasmApi.Api.Controllers
         [Route("{userId}/GetItems")]
         public async Task<ActionResult<IEnumerable<CartItemDto>>> GetItems(int userId)
         {
-            var cartItems = await shoppingCartRepository.GetItems(userId);
-
-            if (cartItems == null)
+            try
             {
-                return NoContent();
+                var cartItems = await shoppingCartRepository.GetItems(userId);
+
+                if (cartItems == null)
+                {
+                    return NoContent();
+                }
+
+                var cartItemDto = cartItems.ConvertToDto();
+
+                return Ok(cartItemDto);
             }
-
-            var cartItemDto = cartItems.ConvertToDto();
-
-            return Ok(cartItemDto);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CartItemDto>> GetItem(int id)
         {
-            var cartItem = await shoppingCartRepository.GetItem(id);
-
-            if (cartItem == null)
+            try
             {
-                return NoContent();
+                var cartItem = await shoppingCartRepository.GetItem(id);
+
+                if (cartItem == null)
+                {
+                    return NoContent();
+                }
+
+                var cartItemDto = cartItem.ConvertToDto();
+
+                return Ok(cartItemDto);
             }
-
-            var cartItemDto = cartItem.ConvertToDto();
-
-            return Ok(cartItemDto);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<CartItemDto>> PostItem([FromBody] CartItemToAddDto cartItemToAddDto)
         {
-            var newCartItem = await shoppingCartRepository.AddItem(cartItemToAddDto);
-
-            if (newCartItem == null)
+            try
             {
-                return NoContent();
+                var newCartItem = await shoppingCartRepository.AddItem(cartItemToAddDto);
+
+                if (newCartItem == null)
+                {
+                    return NoContent();
+                }
+
+                var product = await productRepository.GetItem(newCartItem.ProductId);
+
+                if (product == null)
+                {
+                    throw new Exception($"Somethig went wrong when attempting to retrieve product #{newCartItem.ProductId}");
+                }
+
+                var newCartItemDto = newCartItem.ConvertToDto();
+
+                return CreatedAtAction(
+                    nameof(GetItem),
+                    new { id = newCartItemDto.Id },
+                    newCartItemDto);
             }
-
-            var product = await productRepository.GetItem(newCartItem.ProductId);
-
-            if (product == null)
+            catch (Exception ex)
             {
-                throw new Exception($"Somethig went wrong when attempting to retrieve product #{newCartItem.ProductId}");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
-            var newCartItemDto = newCartItem.ConvertToDto();
-
-            return CreatedAtAction(
-                nameof(GetItem),
-                new { id = newCartItemDto.Id },
-                newCartItemDto);
         }
 
         [HttpDelete("{id:int}")]

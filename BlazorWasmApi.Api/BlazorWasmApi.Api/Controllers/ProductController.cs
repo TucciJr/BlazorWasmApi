@@ -19,31 +19,85 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProductDto>>> GetItems()
     {
-        var products = await productRepository.GetItems();
-        var productCategories = await productRepository.GetCategories();
-
-        if (products == null || productCategories == null)
+        try
         {
-            return NotFound();
+            var products = await productRepository.GetItems();
+
+            if (products == null)
+            {
+                return NotFound();
+            }
+
+            var productsDto = products.ConvertToDto();
+
+            return Ok(productsDto);
         }
-
-        var productsDto = products.ConvertToDto(productCategories);
-
-        return Ok(productsDto);
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database.");
+        }
     }
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ProductDto>> GetItem(int id)
     {
-        var product = await productRepository.GetItem(id);
-
-        if (product == null)
+        try
         {
-            return BadRequest();
-        }
-        var productCategory = await productRepository.GetCategory(product.CategoryId);
-        var productDto = product.ConvertToDto(productCategory);
+            var product = await productRepository.GetItem(id);
 
-        return Ok(productDto);
+            if (product == null)
+            {
+                return BadRequest();
+            }
+            var productCategory = await productRepository.GetCategory(product.CategoryId);
+            var productDto = product.ConvertToDto(productCategory);
+
+            return Ok(productDto);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database.");
+        }
+    }
+
+    [HttpGet]
+    [Route(nameof(GetProductCategories))]
+    public async Task<ActionResult<IEnumerable<ProductCategoryDto>>> GetProductCategories()
+    {
+        try
+        {
+            var productCategories = await productRepository.GetCategories();
+
+            var productCategoriesDtos = productCategories.ConvertToDto();
+
+            return Ok(productCategoriesDtos);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database.");
+        }
+    }
+
+    [HttpGet]
+    [Route("{categoryId}/GetItemsByCategory")]
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetItemsByCategory(int categoryId)
+    {
+        try
+        {
+            var products = await productRepository.GetItemsByCategory(categoryId);
+
+            if (products == null)
+            {
+                return NotFound();
+            }
+
+            var productsDto = products.ConvertToDto();
+
+            return Ok(productsDto);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from the database.");
+        }
     }
 }
