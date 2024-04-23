@@ -25,7 +25,7 @@ public class ProductDetailsBase : ComponentBase
 
     public List<CartItemDto> ShoppingCartItems { get; set; }
 
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnInitializedAsync()
     {
         try
         {
