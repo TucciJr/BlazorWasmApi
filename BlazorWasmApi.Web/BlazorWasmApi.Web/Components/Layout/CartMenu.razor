@@ -22,6 +22,6 @@
 
     void IDisposable.Dispose()
     {
-        shoppingCartService.OnShoppingCartChanged += ShoppingCartChanged;
+        shoppingCartService.OnShoppingCartChanged -= ShoppingCartChanged;
     }
 }

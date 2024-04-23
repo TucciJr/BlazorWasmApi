@@ -21,16 +21,3 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
-
-@code {
-    [Inject]
-    public IShoppingCartService ShoppingCartService { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var shoppingCartItems = await ShoppingCartService.GetItems(HardCoded.UserId);
-        var totalQty = shoppingCartItems.Sum(x => x.Qty);
-
-        ShoppingCartService.RaiseEventoOnShoppingCartChanged(totalQty);
-    }
-}
