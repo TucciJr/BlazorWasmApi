@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using BlazorWasmApi.Web.Client.Pages;
 using BlazorWasmApi.Web.Components;
 using BlazorWasmApi.Web.Services;
@@ -20,6 +21,10 @@ namespace BlazorWasmApi.Web
 
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddScoped<IManageProductsLocalStorageService, ManageProductsLocalStorageService>();
+            builder.Services.AddScoped<IManageCartItemsLocalStorageService, ManageCartItemsLocalStorageService>();
 
             var app = builder.Build();
 

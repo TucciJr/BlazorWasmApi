@@ -11,6 +11,10 @@ public partial class Products
     public IProductService ProductService { get; set; }
     [Inject]
     public IShoppingCartService ShoppingCartService { get; set; }
+    [Inject]
+    public IManageProductsLocalStorageService ManageProductsLocalStorageService { get; set; }
+    [Inject]
+    public IManageCartItemsLocalStorageService ManageCartItemsLocalStorageService { get; set; }
 
     public IEnumerable<ProductDto> ProductDtos { get; set; }
     public NavigationManager NavigationManager { get; set; }
@@ -20,9 +24,12 @@ public partial class Products
     {
         try
         {
-            ProductDtos = await ProductService.GetItems();
+            await ClearLocalStorage();
 
-            var shoppingCartItems = await ShoppingCartService.GetItems(HardCoded.UserId);
+            ProductDtos = await ManageProductsLocalStorageService.GetCollection();//ProductService.GetItems()
+
+            var shoppingCartItems = await ManageCartItemsLocalStorageService.GetCollection();//ShoppingCartService.GetItems(HardCoded.UserId);
+
             var totalQty = shoppingCartItems.Sum(x => x.Qty);
 
             ShoppingCartService.RaiseEventoOnShoppingCartChanged(totalQty);
@@ -44,5 +51,11 @@ public partial class Products
     protected string GetCategoryName(IGrouping<int, ProductDto> productByCategoryGroup)
     {
         return productByCategoryGroup.FirstOrDefault(p => p.CategoryId == productByCategoryGroup.Key).CategoryName;
+    }
+
+    private async Task ClearLocalStorage()
+    {
+        await ManageProductsLocalStorageService.RemoveCollection();
+        await ManageCartItemsLocalStorageService.RemoveCollection();
     }
 }

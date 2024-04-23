@@ -11,6 +11,11 @@ public partial class ShoppingCart
     public IJSRuntime Js { get; set; }
     [Inject]
     public IShoppingCartService ShoppingCartService { get; set; }
+    [Inject]
+    public IManageProductsLocalStorageService ManageProductsLocalStorageService { get; set; }
+    [Inject]
+    public IManageCartItemsLocalStorageService ManageCartItemsLocalStorageService { get; set; }
+
     public IEnumerable<CartItemDto> ShoppingCartItems { get; set; }
     public string ErrorMessage { get; set; }
     public string TotalPrice { get; set; }
@@ -20,7 +25,7 @@ public partial class ShoppingCart
     {
         try
         {
-            ShoppingCartItems = await ShoppingCartService.GetItems(HardCoded.UserId);
+            ShoppingCartItems = await ManageCartItemsLocalStorageService.GetCollection();// ShoppingCartService.GetItems(HardCoded.UserId);
 
             CartChanged();
         }
@@ -35,6 +40,8 @@ public partial class ShoppingCart
         var cartItemDto = await ShoppingCartService.DeleteItem(id);
 
         ShoppingCartItems = GetCartItems(id);
+
+        await ManageCartItemsLocalStorageService.SaveCollection(ShoppingCartItems);
 
         CartChanged();
     }
@@ -53,7 +60,7 @@ public partial class ShoppingCart
 
                 var cartItemDto = await ShoppingCartService.UpdateQty(updateItemDto);
 
-                UpdateItemTotalPrice(cartItemDto);
+                await UpdateItemTotalPrice(cartItemDto);
 
                 CartChanged();
 
@@ -96,14 +103,16 @@ public partial class ShoppingCart
         return ShoppingCartItems.FirstOrDefault(i => i.Id == id);
     }
 
-    private void UpdateItemTotalPrice(CartItemDto cartItemDto)
+    private async Task UpdateItemTotalPrice(CartItemDto cartItemDto)
     {
         var item = GetCartItem(cartItemDto.Id);
 
         if (item != null)
         {
             item.TotalPrice = cartItemDto.Price * cartItemDto.Qty;
-        }        
+        }
+
+        await ManageCartItemsLocalStorageService.SaveCollection(ShoppingCartItems);
     }
 
     private void CalculateCartSummartyTotals()
